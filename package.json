@@ -1,0 +1,14 @@
+{
+  "name": "sh1107-js",
+  "version": "0.0.1",
+  "description": "library for working with sh1107 display",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sh1106-js": "https://github.com/stheine/sh1106-js#master"
+  }
+}
