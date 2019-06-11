@@ -75,6 +75,8 @@ async function main() {
     const canvas = PImage.make(128,128);
     
     // load font
+    // Note: you can e.g. also load Font Awesome ttf to render icons
+    // Note2: I tried loading multiple fonts but this doesn't seem to work
     var sourceSansPro = PImage.registerFont('fonts/SourceSansPro-Regular.ttf','SourceSansPro');
     const fontLoaded = new Promise((resolve, reject) => {
         sourceSansPro.load((err) => {
