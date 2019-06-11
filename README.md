@@ -43,6 +43,67 @@ Circles, rectangles, writing text, drawing bitmaps, ...
 
 See https://github.com/stheine/sh1106-js
 
+### Even cooler stuff
+
+Couple the display with the ```pureimage``` library (https://www.npmjs.com/package/pureimage) to draw on it like it was an html canvas.
+
+```js
+const SH1107 = require('sh1107-js');
+const PImage = require('pureimage');
+
+async function render(sh1107, canvas, buffer) {
+    for (let index = 0; index < canvas.height * canvas.width; index += 1) {
+        const r = canvas.data[index * 4 + 0];
+        buffer[index] = (r === 0 ? 0 : 1);
+    }
+    await sh1107.drawBitmap(buffer);
+}
+
+async function main() { 
+    const sh1107 = new SH1107({
+        width: 128,
+        height: 128,
+        i2c: new I2c(),
+        address: 0x3C,
+    });
+    
+    await sh1107.initialize();
+    sh1107.buffer.fill(0x00);
+    await sh1107.update();
+    
+    // init pureimage
+    const canvas = PImage.make(128,128);
+    
+    // load font
+    var sourceSansPro = PImage.registerFont('fonts/SourceSansPro-Regular.ttf','SourceSansPro');
+    const fontLoaded = new Promise((resolve, reject) => {
+        sourceSansPro.load((err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+    await fontLoaded;
+    
+    const buffer = Buffer.alloc(canvas.width * canvas.height);
+    const ctx = canvas.getContext('2d');
+    
+    // draw stuff using familiar html5 canvas syntax
+    ctx.font = "16pt 'SourceSansPro'";
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0,0,128,128);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(`hello world!`, 0, 95);
+
+    // render canvas to sh1107
+    await render(sh1107, canvas, buffer);
+}
+
+main();
+```
+
 ## Reference
 
 * https://github.com/stheine/sh1106-js
