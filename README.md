@@ -28,6 +28,11 @@ async function main () {
         i2c: new I2C(),
         address: 0x3C
     });
+    await sh1107.initialize();
+    
+    // paint it black
+    sh1107.buffer.fill(0x00);
+    await sh1107.update();
     
     await sh1107.fillRect(17,75,100,10,'WHITE');
     
